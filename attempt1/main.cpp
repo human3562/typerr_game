@@ -17,6 +17,8 @@ int main() {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 4;
 
+	//wow git is cool!!!!!!!!!
+
 	sf::RenderWindow window(sf::VideoMode(1024, 768), "jeesus", sf::Style::Default, settings);
 
 	//window.setFramerateLimit(70);
