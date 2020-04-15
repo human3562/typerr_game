@@ -72,7 +72,7 @@ int main() {
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 		fElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1000000.0f;
-		window.setTitle("holy fuck the fps is " + std::to_string(1.0f / fElapsedTime));
+		window.setTitle("FPS: " + std::to_string(1.0f / fElapsedTime));
 
 	}
 

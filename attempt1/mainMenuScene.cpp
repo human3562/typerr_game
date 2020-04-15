@@ -53,13 +53,16 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	startMenu[2].positionX = window->getSize().x + 200.0f;
 	startMenu[2].positionY = (window->getSize().y / 2.0f) - 90.0f;
 	startMenu[2].centered = false;
+	startMenu[2].maxAddSize = 3.0f;
 
 	startMenu[3].positionX = window->getSize().x + 200.0f;
 	startMenu[3].positionY = (window->getSize().y / 2.0f) - 30.0f;
 	startMenu[3].centered = false;
 }
 
+
 void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElapsedTime) {
+
 	window->clear(sf::Color(50, 50, 50));
 
 	//draw (wow)
@@ -89,7 +92,15 @@ void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 void MainMenuScene::EventHandle(sf::RenderWindow* window, sf::Event* event, NetworkManager* nM, SoundMaster* sm) {
 
 	if (event->type == sf::Event::Resized){
-		Start(window, nM);
+		//Start(window, nM);
+		uiPositions[1] = window->getSize().x - 200.0f;
+		uiPositions[4] = window->getSize().x - 200.0f;
+		uiPositions[5] = window->getSize().x - 130.0f;
+		uiPositions[0] = 70.0f;
+		uiPositions[2] = window->getSize().x + 200.0f;
+		uiPositions[3] = window->getSize().x + 200.0f;
+		startMenu[0].positionX = window->getSize().x - 120.0f;
+		return;
 	}
 
 

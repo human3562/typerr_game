@@ -15,12 +15,12 @@ SoundMaster::SoundMaster() {
 	if (!error.loadFromFile("resources/sounds/error.ogg")) {
 		exit(1);
 	}
-	if (!typeMusic.openFromFile("resources/sounds/lovelymagic.ogg"))
+	if (!typeMusic.openFromFile("resources/sounds/music.ogg"))
 		exit(1);// error
-	typeMusic.setVolume(30);
+	typeMusic.setVolume(10);
 	typeMusic.setLoop(true);
-	keySound.setVolume(30);
-	successSound.setVolume(30);
+	keySound.setVolume(20);
+	successSound.setVolume(20);
 }
 
 void SoundMaster::playKey()
@@ -49,7 +49,7 @@ void SoundMaster::playError()
 
 void SoundMaster::playTypeMusic() {
 	typeMusic.play();
-	//typeMusic.setLoopPoints(sf::Music::TimeSpan(sf::seconds(7.68f), sf::seconds(15.36f)));
+	typeMusic.setLoopPoints(sf::Music::TimeSpan(sf::seconds(7.68f), sf::seconds(15.36f)));
 }
 
 void SoundMaster::stopTypeMusic() {
