@@ -16,6 +16,8 @@ void PlayScene::Start(sf::RenderWindow* window, NetworkManager* nM)
 	mistakes = 0;
 	keyPresses = 0;
 
+	part.clear();
+
 	isStarted = true;
 	back = false;
 	switchScene = false;
@@ -187,6 +189,9 @@ void PlayScene::EventHandle(sf::RenderWindow* window, sf::Event* event, NetworkM
 			if (playtext[playtext.size() - 1].typedText == playtext[playtext.size() - 1].text) {
 
 				if (playtext.size() <= wordAmt) score += playtext[playtext.size() - 1].text.length() * multiplier;
+				else {
+					sm->playTypeMusic();
+				}
 
 				pop(&playtext[playtext.size() - 1]);
 				playtext.pop_back();

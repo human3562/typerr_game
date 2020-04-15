@@ -19,19 +19,21 @@ public:
 //	std::string login(std::string uid, std::string pwd);
 
 private:
-	InputText startMenu[4] = {
+	InputText startMenu[6] = {
+		{0.0f, -200.0f,L"профиль\n", 50.0f, -0.7f },
 		{0.0f, 240.0f, L"Играть\n", 70.0f, -7.0f},
+		{0.0f, -200.0f,L"в одиночку\n", 50.0f, -0.6f },
+		{0.0f, -200.0f,L"онлайн\n", 50.0f, -0.6f },
 		{0.0f, 350.0f, L"настройки\n", 50.0f, -6.0f},
-		{0.0f, 440.0f, L"выход\n", 45.0f, -4.0f},
-		{0.0f, -200.0f,L"профиль\n", 50.0f, -0.7f }
+		{0.0f, 440.0f, L"выход\n", 45.0f, -4.0f}
 	};
-	sf::Text mainText;
+	sf::Text mainText = {};
 	sf::Text secondaryText;
 	sf::Font font;
 	std::wstring test = L"";
 	bool startSelected = false;
 	bool profileSelected = false;
 	bool optionsSelected = false;
-	float uiPositions[4] = {};
+	float uiPositions[6] = {};
 };
 
