@@ -18,6 +18,10 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	startMenu[4].typedText = L"";
 	startMenu[5].typedText = L"";
 
+	if (!typewriter.loadFromFile("resources/textures/typetable.png")) {
+		//bad...
+	}
+
 	if (!font.loadFromFile("resources/font2.ttf")) {
 		//bad
 	}
@@ -65,6 +69,18 @@ void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 
 	window->clear(sf::Color(50, 50, 50));
 
+	sf::Sprite outline;
+	outline.setTexture(typewriter);
+	//outline.setTextureRect(sf::IntRect(0, 0, 320, 180));
+	//outline.setColor(sf::Color(180, 0, 0));
+	//outline.setScale(0.5f, 0.5f);
+	//outline.setOutlineColor(sf::Color(200, 10, 10));
+	//outline.setFillColor(sf::Color(40, 40, 40));
+	//outline.setOutlineThickness(3);
+	outline.setPosition((window->getSize().x/2.f)-960, (window->getSize().y/2.f)-540);
+	//outline.setPosition(-120, (window->getSize().y/2.f) - 170.0f);
+	window->draw(outline);
+
 	//draw (wow)
 	startMenu[0].positionY = SmoothApproach(startMenu[0].positionY, uiPositions[0], uiPositions[0], 10.0f, fElapsedTime);
 	startMenu[0].show(window, &mainText, fElapsedTime);
@@ -72,8 +88,17 @@ void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 	secondaryText.setString(nM->getAccountName());
 	float nameWidth = secondaryText.getLocalBounds().width;
 
-	secondaryText.setPosition(window->getSize().x - nameWidth - 20.0f, startMenu[0].positionY - 30.0f);
+	secondaryText.setPosition(window->getSize().x - nameWidth - 20.0f, startMenu[0].positionY - 45.0f);
 	window->draw(secondaryText);
+
+	if (nM->isLoggedIn()) {
+
+		secondaryText.setString(L"WPM: " + std::to_wstring(nM->getWPM()));
+		nameWidth = secondaryText.getLocalBounds().width;
+		secondaryText.setPosition(window->getSize().x - nameWidth - 20.0f, startMenu[0].positionY - 20.0f);
+		window->draw(secondaryText);
+	}
+
 
 	secondaryText.setString(test + L"\n" + std::to_wstring(startMenu[0].text[0]));
 	secondaryText.setPosition(0, 0);
@@ -99,7 +124,30 @@ void MainMenuScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Netw
 		uiPositions[0] = 70.0f;
 		uiPositions[2] = window->getSize().x + 200.0f;
 		uiPositions[3] = window->getSize().x + 200.0f;
+
+		//startMenu[1].positionX = window->getSize().x + 200.0f;
+		startMenu[1].positionY = (window->getSize().y / 2.0f) - 60.0f;
+
+		//startMenu[4].positionX = window->getSize().x + 200.0f;
+		startMenu[4].positionY = (window->getSize().y / 2.0f) + 50.0f;
+
+		//startMenu[5].positionX = window->getSize().x + 130.0f;
+		startMenu[5].positionY = (window->getSize().y / 2.0f) + 140.0f;
+
+		//startMenu[0].maxAddRot = 2.0f;
+		//startMenu[0].maxAddSize = 3.0f;
 		startMenu[0].positionX = window->getSize().x - 120.0f;
+		//startMenu[0].positionY = -200.0f;
+
+		//startMenu[2].positionX = window->getSize().x + 200.0f;
+		startMenu[2].positionY = (window->getSize().y / 2.0f) - 90.0f;
+		//startMenu[2].centered = false;
+		//startMenu[2].maxAddSize = 3.0f;
+
+		//startMenu[3].positionX = window->getSize().x + 200.0f;
+		startMenu[3].positionY = (window->getSize().y / 2.0f) - 30.0f;
+		//startMenu[3].centered = false;
+
 		return;
 	}
 

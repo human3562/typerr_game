@@ -40,12 +40,13 @@ private:
 
 class TextSetting : public Setting {
 public:
-	TextSetting(float positionX, float positionY, std::wstring placeholder);
+	TextSetting(float positionX, float positionY, std::wstring placeholder, bool isPassword);
 	~TextSetting() {}
 
 public:
 	void Show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedTime) override;
 	void EventHandle(sf::RenderWindow* window, sf::Event* event, SoundMaster* sm) override;
+	bool isPassword = false;
 
 private:
 	float timer = 0.f;

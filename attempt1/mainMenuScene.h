@@ -35,5 +35,8 @@ private:
 	bool profileSelected = false;
 	bool optionsSelected = false;
 	float uiPositions[6] = {};
+
+	sf::Texture typewriter;
+
 };
 

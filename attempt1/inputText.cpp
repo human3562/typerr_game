@@ -1,4 +1,5 @@
 #include "inputText.h"
+#include <iostream>
 
 InputText::InputText(float x, float y, std::wstring textVal, float size) {
 	positionX = x; positionY = y;
@@ -53,6 +54,7 @@ void InputText::show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedT
 			else if (animatedFontSize < 0) animatedFontSize = 0;
 		}
 		currentFontSize += animatedFontSize;
+		if (currentFontSize > 100) currentFontSize = 50;
 
 		if (!typedText.empty()) {
 			if (animatedRotation < maxAddRot)
@@ -65,22 +67,26 @@ void InputText::show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedT
 		}
 		currentRotation += animatedRotation;
 	}
-
-	sfText->setStyle(sf::Text::Regular);
-	sfText->setFillColor(sf::Color(200, 200, 200));
-	sfText->setString(text);
-	sfText->setCharacterSize(currentFontSize);
-	sfText->setRotation(currentRotation);
-	if (centered) {
-		float centeredX = positionX - sfText->getLocalBounds().width / 2.0f;
-		sfText->setPosition(centeredX, positionY);
+	try {
+		sfText->setStyle(sf::Text::Regular);
+		sfText->setFillColor(sf::Color(200, 200, 200));
+		sfText->setString(text);
+		sfText->setCharacterSize(currentFontSize);
+		sfText->setRotation(currentRotation);
+		if (centered) {
+			float centeredX = positionX - sfText->getLocalBounds().width / 2.0f;
+			sfText->setPosition(centeredX, positionY);
+		}
+		else {
+			sfText->setPosition(positionX, positionY);
+		}
+		window->draw(*sfText);
+		sfText->setFillColor(sf::Color(0, 150, 0));
+		sfText->setStyle(sf::Text::Underlined);
+		sfText->setString(typedText);
+		window->draw(*sfText);
 	}
-	else {
-		sfText->setPosition(positionX, positionY);
+	catch (const std::exception& e) {
+		std::cout << e.what();
 	}
-	window->draw(*sfText);
-	sfText->setFillColor(sf::Color(0, 150, 0));
-	sfText->setStyle(sf::Text::Underlined);
-	sfText->setString(typedText);
-	window->draw(*sfText);
 }

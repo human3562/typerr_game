@@ -19,8 +19,8 @@ private:
 	bool back = false;
 	bool loggedIn = false;
 	UIStuff loginForm;
-	TextSetting t1 = { 0.0f, 0.0f, L"Ваш логин" };
-	TextSetting t2 = { 0.0f, 0.0f, L"Ваш пароль" };
+	TextSetting t1 = { 0.0f, 0.0f, L"Ваш логин", false };
+	TextSetting t2 = { 0.0f, 0.0f, L"Ваш пароль", true };
 	ButtonSetting t3 = { 0.0f, 0.0f, L"Подтвердить", -10.0f };
 };
 

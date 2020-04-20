@@ -26,6 +26,11 @@ void ResultScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	options[1].centered = false;
 	options[1].positionX = 20.0f;
 	options[1].positionY = window->getSize().y - 100.0f;
+
+	if (nM->isLoggedIn()) {
+		nM->uploadResult(WPM, accuracy);
+	}
+
 }
 
 std::wstring ResultScene::nf(float time) {

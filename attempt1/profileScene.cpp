@@ -33,6 +33,7 @@ void ProfileScene::Start(sf::RenderWindow* window, NetworkManager* nM)
 	loginForm.settings.push_back(&t1);
 	loginForm.settings.push_back(&t2);
 	loginForm.settings.push_back(&t3);
+
 }
 
 void ProfileScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElapsedTime)
@@ -44,6 +45,14 @@ void ProfileScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fE
 		mainText.setRotation(0);
 		mainText.setPosition(10.0f, 50.0f);
 		mainText.setCharacterSize(50);
+		window->draw(mainText);
+		mainText.setString(L"Ваш средний WPM(слов в минуту): " + std::to_wstring(nM->getWPM()) + L";");
+		mainText.setPosition(10.0f, 130.0f);
+		mainText.setCharacterSize(30);
+		window->draw(mainText);
+		mainText.setString(L"Ваша средняя точность: " + std::to_wstring(nM->getACC()) + L"%.");
+		mainText.setPosition(10.0f, 160.0f);
+		mainText.setCharacterSize(30);
 		window->draw(mainText);
 	}
 	else {

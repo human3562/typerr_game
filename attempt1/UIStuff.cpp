@@ -32,9 +32,10 @@ void UIStuff::EventHandle(sf::RenderWindow* window, sf::Event* event, SoundMaste
 
 }
 
-TextSetting::TextSetting(float positionX, float positionY, std::wstring placeholder){
+TextSetting::TextSetting(float positionX, float positionY, std::wstring placeholder, bool isPassword){
 	this->positionX = positionX; this->positionY = positionY;
 	this->placeholder = placeholder;
+	this->isPassword = isPassword;
 	if (!t_selection.loadFromFile("resources/textures/settingSelection.png")) {
 		//bad...
 	}
@@ -62,7 +63,16 @@ void TextSetting::Show(sf::RenderWindow* window, sf::Text* sfText, float fElapse
 	}
 	else {
 		sfText->setPosition(positionX + 3.f, positionY);
-		sfText->setString(input + ((int)timer % 2 == 1 ? L"|" : L""));
+		if (isPassword) {
+			std::wstring str = L"";
+			for (int i = 0; i < input.size(); i++) {
+				str += L"•";
+			}
+			sfText->setString(str + ((int)timer % 2 == 1 ? L"|" : L""));
+		}
+		else {
+			sfText->setString(input + ((int)timer % 2 == 1 ? L"|" : L""));
+		}
 		sfText->setFillColor(sf::Color(200, 200, 200));
 		window->draw(*sfText);
 	}
@@ -71,6 +81,7 @@ void TextSetting::Show(sf::RenderWindow* window, sf::Text* sfText, float fElapse
 void TextSetting::EventHandle(sf::RenderWindow* window, sf::Event* event, SoundMaster* sm){
 	if (event->type == sf::Event::TextEntered) {
 		wchar_t inputChar = static_cast<wchar_t>(event->text.unicode);
+		std::wstring reg = L"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
 		if (event->text.unicode == 13 || event->text.unicode == 27) return;
 		if (inputChar == L'\b') {
 			if (!input.empty()) {
@@ -79,8 +90,10 @@ void TextSetting::EventHandle(sf::RenderWindow* window, sf::Event* event, SoundM
 			}
 		}
 		else {
-			input += inputChar;
-			sm->playKey();
+			if (reg.find(inputChar) != std::wstring::npos) {
+				input += inputChar;
+				sm->playKey();
+			}else sm->playError();
 		}
 	}
 }
