@@ -44,7 +44,7 @@ std::wstring ResultScene::nf(float time) {
 }
 
 void ResultScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElapsedTime){
-	window->clear(sf::Color(50, 50, 50));
+	//window->clear(sf::Color(50, 50, 50));
 
 	mainText.setFont(font);
 	mainText.setCharacterSize(100);
@@ -103,7 +103,7 @@ void ResultScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fEl
 	mainText.setString(grade);
 	window->draw(mainText);
 
-	window->display();
+	//window->display();
 }
 
 void ResultScene::EventHandle(sf::RenderWindow* window, sf::Event* event, NetworkManager* nM, SoundMaster* sm){

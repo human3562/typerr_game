@@ -67,7 +67,7 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 
 void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElapsedTime) {
 
-	window->clear(sf::Color(50, 50, 50));
+	//window->clear(sf::Color(50, 50, 50));
 
 	sf::Sprite outline;
 	outline.setTexture(typewriter);
@@ -111,7 +111,7 @@ void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 		startMenu[i].show(window, &mainText, fElapsedTime);
 	}
 
-	window->display();
+	//window->display();
 }
 
 void MainMenuScene::EventHandle(sf::RenderWindow* window, sf::Event* event, NetworkManager* nM, SoundMaster* sm) {

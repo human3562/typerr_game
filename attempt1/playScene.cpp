@@ -66,7 +66,7 @@ void PlayScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElap
 	//window->draw(mainText);
 
 	//window->display();
-	window->clear(sf::Color(50, 50, 50));
+	//window->clear(sf::Color(50, 50, 50));
 
 	sf::RectangleShape rect(sf::Vector2f(window->getSize().x+100, 40));
 	rect.setPosition(sf::Vector2f(-50, (window->getSize().y / 2.0f) + 5));
@@ -163,7 +163,7 @@ void PlayScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElap
 
 	window->draw(particleSize);
 
-	window->display();
+	//window->display();
 	if (playtext.size() <= wordAmt) {
 		time += fElapsedTime;
 	}

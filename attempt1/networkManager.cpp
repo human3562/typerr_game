@@ -1,5 +1,4 @@
 #include "networkManager.h"
-
 #include "curl/curl.h"
 #include <nlohmann/json.hpp>
 //int qstate;
@@ -43,7 +42,7 @@ int NetworkManager::login(std::wstring uid, std::wstring pwd) {
 		res = curl_easy_perform(curl);
 
 
-		//std::cout << readBuffer << std::endl;
+		std::cout << readBuffer << std::endl;
 
 		try {
 			json result = json::parse(readBuffer);
@@ -335,6 +334,73 @@ void NetworkManager::updateStats()
 	curl_global_cleanup();
 }
 
+static std::mutex notifMutex;
+
+void longPollServer(bool *polling, int id, int *lastModifyTime, std::vector<std::string>* notifications)
+{
+	*polling = true;
+	CURL* curl;
+	CURLcode res;
+
+	std::string str = "uniquekey=" + std::to_string(id) + "&lastupdate="+std::to_string(*lastModifyTime);
+	/* In windows, this will init the winsock stuff */
+	curl_global_init(CURL_GLOBAL_ALL);
+	std::string readBuffer;
+	/* get a curl handle */
+	curl = curl_easy_init();
+	if (curl) {
+		/* First set the URL that is about to receive our POST. This URL can
+		   just as well be a https:// URL if that is what should receive the
+		   data. */
+
+
+
+		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/long_poll.php");
+		/* Now specify the POST data */
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		/* Perform the request, res will get the return code */
+		res = curl_easy_perform(curl);
+
+
+		std::cout << readBuffer << std::endl;
+
+		try {
+			json result = json::parse(readBuffer);
+			std::cout << result.dump() << std::endl;
+
+			std::lock_guard<std::mutex> lock(notifMutex);
+			notifications->push_back(result["content"].get<std::string>());
+
+			*lastModifyTime = result["time"].get<int>();
+			std::cout << *lastModifyTime << std::endl;
+		}
+		catch (json::exception & e)
+		{
+			// output exception information
+			std::cout << "message: " << e.what() << '\n'
+				<< "exception id: " << e.id << std::endl;
+		}
+
+
+		/* Check for errors */
+		if (res != CURLE_OK)
+			fprintf(stderr, "curl_easy_perform() failed: %s\n",
+				curl_easy_strerror(res));
+
+		/* always cleanup */
+		curl_easy_cleanup(curl);
+	}
+	curl_global_cleanup();
+	*polling = false;
+}
+
+void NetworkManager::startPolling()
+{
+	m_Futures.push_back(std::async(std::launch::async, longPollServer, &polling, id, &lastModifyTime, &serverEvents));
+}
+
 int NetworkManager::getWPM()
 {
 	return averageWPM;
@@ -350,6 +416,35 @@ int NetworkManager::getACC()
 std::wstring NetworkManager::getAccountName() {
 	std::wstring wstr(accountName.begin(), accountName.end());
 	return wstr;
+}
+
+void NetworkManager::drawServerMessages(sf::RenderWindow* window, float fElapsedTime)
+{
+	if (!serverEvents.empty()) {
+		std::cout << serverEvents.front() << std::endl;
+		json result = json::parse(serverEvents.front());
+
+		if (result["sendType"] == "notification") {
+			std::cout << "oh wow" << std::endl;
+			messages.push_back({ result["content"].get<std::string>() , 10.f });
+		}
+
+		serverEvents.erase(serverEvents.begin());
+	}
+
+	if (!messages.empty()) {
+		for (int i = 0; i < messages.size(); i++) {
+			messages[i].update(fElapsedTime);
+			//std::cout << "doin it" << std::endl;
+			messages[i].show(window, &mainText, fElapsedTime);
+		}
+		for (int i = messages.size() - 1; i >= 0; i--) {
+			if (messages[i].finished) messages.erase(messages.begin() + i);
+		}
+	}
+
+
+
 }
 
 bool NetworkManager::isLoggedIn() {

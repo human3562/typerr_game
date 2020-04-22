@@ -52,7 +52,10 @@ void InputText::show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedT
 		else {
 			if (animatedFontSize > 0) animatedFontSize -= animSpeed * fElapsedTime;
 			else if (animatedFontSize < 0) animatedFontSize = 0;
+			if (animatedFontSize > maxAddSize) animatedFontSize = maxAddSize;
 		}
+		if (animatedFontSize > maxAddSize) animatedFontSize = maxAddSize;
+		if (animatedFontSize < 0) animatedFontSize = 0;
 		currentFontSize += animatedFontSize;
 		if (currentFontSize > 100) currentFontSize = 50;
 
@@ -72,6 +75,7 @@ void InputText::show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedT
 		sfText->setFillColor(sf::Color(200, 200, 200));
 		sfText->setString(text);
 		sfText->setCharacterSize(currentFontSize);
+		//std::cout << currentFontSize << std::endl;
 		sfText->setRotation(currentRotation);
 		if (centered) {
 			float centeredX = positionX - sfText->getLocalBounds().width / 2.0f;

@@ -38,7 +38,7 @@ void ProfileScene::Start(sf::RenderWindow* window, NetworkManager* nM)
 
 void ProfileScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElapsedTime)
 {
-	window->clear(sf::Color(50, 50, 50));
+	//window->clear(sf::Color(50, 50, 50));
 
 	if (nM->isLoggedIn()) {
 		mainText.setString(L"Привет, "+nM->getAccountName()+L"!");
@@ -91,7 +91,7 @@ void ProfileScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fE
 		window->draw(mainText);*/
 	}
 
-	window->display();
+	//window->display();
 }
 
 void ProfileScene::EventHandle(sf::RenderWindow* window, sf::Event* event, NetworkManager* nM, SoundMaster* sm)

@@ -141,6 +141,7 @@
     <ClCompile Include="inputText.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenuScene.cpp" />
+    <ClCompile Include="msgBox.cpp" />
     <ClCompile Include="networkManager.cpp" />
     <ClCompile Include="playScene.cpp" />
     <ClCompile Include="profileScene.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="gameState.h" />
     <ClInclude Include="inputText.h" />
     <ClInclude Include="mainMenuScene.h" />
+    <ClInclude Include="msgBox.h" />
     <ClInclude Include="networkManager.h" />
     <ClInclude Include="playScene.h" />
     <ClInclude Include="profileScene.h" />

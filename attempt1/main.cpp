@@ -26,6 +26,18 @@ int main() {
 	NetworkManager nM;
 	SoundMaster sm;
 
+	sf::Text mainText;
+	sf::Font font;
+
+	if (!font.loadFromFile("resources/font2.ttf")) {
+		//bad
+	}
+
+	mainText.setFont(font);
+	mainText.setStyle(sf::Text::Regular);
+
+	nM.mainText = mainText;
+
 	GameScene* scenes[4];
 	ProfileScene s_profile;
 	MainMenuScene s_mainmenu;
@@ -58,17 +70,28 @@ int main() {
 			}
 
 		}
+		window.clear(sf::Color(50, 50, 50));
 
 		if (!scenes[currentGameState]->isStarted) {
 			scenes[currentGameState]->Start(&window, &nM);
 		}
 		else {
+
 			if (scenes[currentGameState]->switchScene)
 				currentGameState = scenes[currentGameState]->switchSceneEvent();
 			else
 				scenes[currentGameState]->Update(&window, &nM, fElapsedTime);
 			//if (scenes[currentGameState]->switchScene) currentGameState = scenes[currentGameState]->switchSceneEvent();
+
+			if (nM.isLoggedIn()) {
+				if (!nM.polling) {
+					nM.startPolling();
+				}
+				nM.drawServerMessages(&window, fElapsedTime);
+			}
+
 		}
+		window.display();
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 		fElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1000000.0f;
