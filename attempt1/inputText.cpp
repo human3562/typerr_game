@@ -39,8 +39,31 @@ bool InputText::inputEvent(wchar_t input, SoundMaster* sm) {
 	return false;
 }
 
+bool InputText::belongs(wchar_t input, SoundMaster* sm) {
+	/*if (input == L'\b') {
+		if (!typedText.empty()) {
+			typedText.erase(typedText.size() - 1, 1);
+			sm->playBackspace();
+			return true;
+		}
+	}*/
+	if (typedText + input == text.substr(0, typedText.size() + 1)) {
+		//typedText += input;
+		/*sound.setBuffer(keySounds[rand() % 4]);
+		sound.setVolume(30);
+		sound.play();*/
+		//sm->playKey();
+		return true;
+	}
+	return false;
+}
+
 void InputText::show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedTime) {
-	if (!isSelected) typedText = L"";
+	bool originalisSelected = true;
+	if (!isSelected) {
+		typedText = L"";
+		originalisSelected = false;
+	}
 	float currentFontSize = fontSize;
 	float currentRotation = rotation;
 	if (animate) {

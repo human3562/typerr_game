@@ -6,5 +6,6 @@ enum e_gameState {
 	MENU,
 	PLAY,
 	PROFILE,
-	RESULT
+	RESULT,
+	PLAYER_PICK
 };

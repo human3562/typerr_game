@@ -143,6 +143,7 @@
     <ClCompile Include="mainMenuScene.cpp" />
     <ClCompile Include="msgBox.cpp" />
     <ClCompile Include="networkManager.cpp" />
+    <ClCompile Include="pickPlayerScene.cpp" />
     <ClCompile Include="playScene.cpp" />
     <ClCompile Include="profileScene.cpp" />
     <ClCompile Include="resultScene.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="mainMenuScene.h" />
     <ClInclude Include="msgBox.h" />
     <ClInclude Include="networkManager.h" />
+    <ClInclude Include="pickPlayerScene.h" />
     <ClInclude Include="playScene.h" />
     <ClInclude Include="profileScene.h" />
     <ClInclude Include="resource.h" />

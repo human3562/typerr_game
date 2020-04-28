@@ -7,6 +7,7 @@
 #include "soundMaster.h"
 #include "profileScene.h"
 #include "networkManager.h"
+#include "pickPlayerScene.h"
 
 int main() {
 	srand(unsigned(time(0)));
@@ -19,7 +20,7 @@ int main() {
 
 	sf::RenderWindow window(sf::VideoMode(1024, 768), "jeesus", sf::Style::Default, settings);
 
-	//window.setFramerateLimit(70);
+	//window.setFramerateLimit(300);
 
 	window.setKeyRepeatEnabled(false); //no spam   >:(
 
@@ -38,10 +39,11 @@ int main() {
 
 	nM.mainText = mainText;
 
-	GameScene* scenes[4];
+	GameScene* scenes[5];
 	ProfileScene s_profile;
 	MainMenuScene s_mainmenu;
 	ResultScene s_result;
+	PickPlayerScene s_pickplayer;
 
 	PlayScene s_play;
 	s_play.loadText();
@@ -51,6 +53,7 @@ int main() {
 	scenes[PLAY] =    &s_play;
 	scenes[PROFILE] = &s_profile;
 	scenes[RESULT] =  &s_result;
+	scenes[PLAYER_PICK] = &s_pickplayer;
 
 	while (window.isOpen()) {
 
@@ -92,10 +95,11 @@ int main() {
 
 		}
 		window.display();
-
-		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-		fElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1000000.0f;
+		
 		window.setTitle("FPS: " + std::to_string(1.0f / fElapsedTime));
+		
+		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+		fElapsedTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() / 1e+9;
 
 	}
 

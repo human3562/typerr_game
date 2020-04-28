@@ -10,6 +10,7 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	startSelected = false;
 	optionsSelected = false;
 	profileSelected = false;
+	onlineSelected = false;
 
 	startMenu[0].typedText = L"";
 	startMenu[1].typedText = L"";
@@ -17,6 +18,8 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	startMenu[3].typedText = L"";
 	startMenu[4].typedText = L"";
 	startMenu[5].typedText = L"";
+	startMenu[6].typedText = L"";
+	startMenu[7].typedText = L"";
 
 	if (!typewriter.loadFromFile("resources/textures/typetable.png")) {
 		//bad...
@@ -32,12 +35,14 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	secondaryText.setFont(font);
 	secondaryText.setStyle(sf::Text::Regular);
 
-	uiPositions[1] = window->getSize().x - 200.0f;
-	uiPositions[4] = window->getSize().x - 200.0f;
-	uiPositions[5] = window->getSize().x - 130.0f;
 	uiPositions[0] = 70.0f;
+	uiPositions[1] = window->getSize().x - 200.0f;
 	uiPositions[2] = window->getSize().x + 200.0f;
 	uiPositions[3] = window->getSize().x + 200.0f;
+	uiPositions[4] = window->getSize().x - 200.0f;
+	uiPositions[5] = window->getSize().x - 130.0f;
+	uiPositions[6] = 120.f;
+	uiPositions[7] = 300.f;
 
 
 	startMenu[1].positionX = window->getSize().x + 200.0f;
@@ -62,12 +67,17 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	startMenu[3].positionX = window->getSize().x + 200.0f;
 	startMenu[3].positionY = (window->getSize().y / 2.0f) - 30.0f;
 	startMenu[3].centered = false;
+
+	startMenu[6].maxAddRot = 0.6;
+
 }
 
 
 void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElapsedTime) {
 
 	//window->clear(sf::Color(50, 50, 50));
+
+	
 
 	sf::Sprite outline;
 	outline.setTexture(typewriter);
@@ -105,7 +115,7 @@ void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 	window->draw(secondaryText);
 
 
-	for (int i = 1; i < 6; i++) {
+	for (int i = 1; i < 8; i++) {
 		//startMenu[i].positionX = lerp(startMenu[i].positionX, uiPositions[i], fElapsedTime * 15.0f);
 		startMenu[i].positionX = SmoothApproach(startMenu[i].positionX, uiPositions[i], uiPositions[i], 10.0f, fElapsedTime);
 		startMenu[i].show(window, &mainText, fElapsedTime);
@@ -154,31 +164,58 @@ void MainMenuScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Netw
 
 	if (event->type == sf::Event::KeyPressed) {
 		if (event->key.code == sf::Keyboard::Enter) {
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 8; i++) {
 				if (startMenu[i].typedText != L"") startMenu[i].typedText = startMenu[i].text;
 			}
 		}
+		/*if (event->key.code == sf::Keyboard::Space) {
+			nM->whosonline();
+		}*/
 	}
 
 	if (event->type == sf::Event::TextEntered) {
 		wchar_t inputChar = static_cast<wchar_t>(event->text.unicode);
 		//if (event->text.unicode == 13) inputChar = '\n';
 		int atleastone = false;
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 8; i++) {
+
+			if (inputChar == L'\b') {
+				startMenu[i].inputEvent(inputChar, sm);
+				continue;
+			}
+			//startMenu[i].isSelected = true;
 			if ((i == 2 || i == 3) && startMenu[1].typedText != startMenu[1].text) continue;
-			if (startMenu[i].inputEvent(inputChar, sm)) {
+			if (startMenu[i].belongs(inputChar, sm)) {
 				atleastone = true;
-				for (int j = 0; j < 6; j++) {
+				for (int j = 0; j < 8; j++) {
+					//if (j == i) continue;
 					if (i == 2 || i == 3) {
 						if (j == 1) continue;
 					}
 					startMenu[j].isSelected = false;
+					if (startMenu[j].belongs(inputChar, sm)) {
+						if (startMenu[j].typedText.length() > startMenu[i].typedText.length()) {
+							startMenu[i].isSelected = false;
+							startMenu[j].isSelected = true;
+							startMenu[j].inputEvent(inputChar, sm);
+							//break;
+						}
+						else {
+							startMenu[i].isSelected = true;
+							startMenu[i].inputEvent(inputChar, sm);
+							startMenu[j].isSelected = false;
+							//break;
+						}
+					}
+					//startMenu[j].isSelected = false;
 				}
 				startMenu[i].isSelected = true;
 				break;
 			}
 		}
-		if (!atleastone) sm->playError();
+		if (!atleastone) {
+			sm->playError();
+		}
 		/*if (startMenu[0].typedText == startMenu[0].text) {
 			startSelected = true;
 			switchScene = true;
@@ -199,9 +236,15 @@ void MainMenuScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Netw
 		if (startMenu[0].typedText == startMenu[0].text) {
 			switchScene = true;
 			profileSelected = true;
+			sm->playSuccess();
 		}
 		if (startMenu[2].typedText == startMenu[2].text) {
 			startSelected = true;
+			switchScene = true;
+			sm->playSuccess();
+		}
+		if (startMenu[3].typedText == startMenu[3].text) {
+			onlineSelected = true;
 			switchScene = true;
 			sm->playSuccess();
 		}
@@ -215,6 +258,9 @@ e_gameState MainMenuScene::switchSceneEvent() {
 	}
 	if (profileSelected) {
 		return PROFILE;
+	}
+	if (onlineSelected) {
+		return PLAYER_PICK;
 	}
 }
 

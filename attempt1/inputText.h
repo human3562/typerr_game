@@ -25,6 +25,7 @@ private:
 public:
 	void show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedTime);
 	bool inputEvent(wchar_t input, SoundMaster* sm);
+	bool belongs(wchar_t input, SoundMaster* sm);
 	InputText(float x, float y, std::wstring text, float size);
 	InputText(float x, float y, std::wstring text, float size, float rot);
 	InputText(float x, float y, std::wstring text, float size, bool anim);

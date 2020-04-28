@@ -19,13 +19,15 @@ public:
 //	std::string login(std::string uid, std::string pwd);
 
 private:
-	InputText startMenu[6] = {
-		{0.0f, -200.0f,L"профиль\n", 50.0f, -0.7f },
+	InputText startMenu[8] = {
+		{0.0f, -200.0f,L"Профиль\n", 50.0f, -0.7f },
 		{0.0f, 240.0f, L"Играть\n", 70.0f, -7.0f},
 		{0.0f, -200.0f,L"в одиночку\n", 50.0f, -0.6f },
 		{0.0f, -200.0f,L"онлайн\n", 50.0f, -0.6f },
-		{0.0f, 350.0f, L"настройки\n", 50.0f, -6.0f},
-		{0.0f, 440.0f, L"выход\n", 45.0f, -4.0f}
+		{0.0f, 350.0f, L"Настройки\n", 50.0f, -6.0f},
+		{0.0f, 440.0f, L"выход\n", 45.0f, -4.0f},
+		{0.0f, 180.0f, L"принять\n", 45.0f, -4.0f},
+		{0.0f, 210.0f, L"отклонить\n", 45.0f, 0.6f}
 	};
 	sf::Text mainText = {};
 	sf::Text secondaryText;
@@ -34,7 +36,8 @@ private:
 	bool startSelected = false;
 	bool profileSelected = false;
 	bool optionsSelected = false;
-	float uiPositions[6] = {};
+	bool onlineSelected = false;
+	float uiPositions[8] = {};
 
 	sf::Texture typewriter;
 
