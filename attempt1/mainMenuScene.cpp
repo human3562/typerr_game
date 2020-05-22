@@ -11,6 +11,8 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	optionsSelected = false;
 	profileSelected = false;
 	onlineSelected = false;
+	duelintent = false;
+	nM->gotoduel = false;
 
 	startMenu[0].typedText = L"";
 	startMenu[1].typedText = L"";
@@ -21,19 +23,31 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	startMenu[6].typedText = L"";
 	startMenu[7].typedText = L"";
 
-	if (!typewriter.loadFromFile("resources/textures/typetable.png")) {
-		//bad...
-	}
+	if (!loaded) {
+		if (!typewriter.loadFromFile("resources/textures/typetable.png")) {
+			//bad...
+		}
 
-	if (!font.loadFromFile("resources/font2.ttf")) {
-		//bad
+		if (!paper.loadFromFile("resources/textures/paper.png")) {
+			//bad...
+		}
+
+		if (!font.loadFromFile("resources/font2.ttf")) {
+			//bad
+		}
+		
+		if (!font2.loadFromFile("resources/font.ttf")) {
+			//bad
+		}
 	}
+	loaded = true;
 
 	mainText.setFont(font);
 	mainText.setStyle(sf::Text::Regular);
 
 	secondaryText.setFont(font);
 	secondaryText.setStyle(sf::Text::Regular);
+	secondaryText.setFillColor(sf::Color(200, 200, 200));
 
 	uiPositions[0] = 70.0f;
 	uiPositions[1] = window->getSize().x - 200.0f;
@@ -76,28 +90,57 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float fElapsedTime) {
 
 	//window->clear(sf::Color(50, 50, 50));
-
-	
-
-	sf::Sprite outline;
-	outline.setTexture(typewriter);
+	if (nM->gotoduel) {
+		switchScene = true;
+		duelintent = true;
+	}
+	if (!nM->messages.empty()) {
+		if (nM->messages[0].request) {
+			uiPositions[6] = 120.f;
+			uiPositions[7] = 300.f;
+		}
+		else {
+			uiPositions[6] = -120.f;
+			uiPositions[7] = -300.f;
+			nM->activeRequest = false;
+		}
+	}
+	else {
+		uiPositions[6] = -120.f;
+		uiPositions[7] = -300.f;
+		nM->activeRequest = false;
+	}
+	sf::Sprite bg;
+	bg.setTexture(typewriter);
 	//outline.setTextureRect(sf::IntRect(0, 0, 320, 180));
 	//outline.setColor(sf::Color(180, 0, 0));
 	//outline.setScale(0.5f, 0.5f);
 	//outline.setOutlineColor(sf::Color(200, 10, 10));
 	//outline.setFillColor(sf::Color(40, 40, 40));
 	//outline.setOutlineThickness(3);
-	outline.setPosition((window->getSize().x/2.f)-960, (window->getSize().y/2.f)-540);
+	bg.setPosition((window->getSize().x/2.f)-960, (window->getSize().y/2.f)-540);
 	//outline.setPosition(-120, (window->getSize().y/2.f) - 170.0f);
-	window->draw(outline);
+	window->draw(bg);
+
+
+	sf::Sprite bottom;
+	bottom.setTexture(paper);
+	bottom.setScale(1.f, 1.f);
+	//bottom.setRotation(-3.f);
+	bottom.setColor(sf::Color(220, 220, 220));
+	bottom.setPosition((window->getSize().x/2.f)-paper.getSize().x/2.f, (window->getSize().y - 400));
+	window->draw(bottom);
 
 	//draw (wow)
 	startMenu[0].positionY = SmoothApproach(startMenu[0].positionY, uiPositions[0], uiPositions[0], 10.0f, fElapsedTime);
 	startMenu[0].show(window, &mainText, fElapsedTime);
 
+	secondaryText.setFillColor(sf::Color(200, 200, 200));
 	secondaryText.setString(nM->getAccountName());
+	secondaryText.setCharacterSize(30);
+	secondaryText.setRotation(0);
 	float nameWidth = secondaryText.getLocalBounds().width;
-
+	
 	secondaryText.setPosition(window->getSize().x - nameWidth - 20.0f, startMenu[0].positionY - 45.0f);
 	window->draw(secondaryText);
 
@@ -110,8 +153,17 @@ void MainMenuScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 	}
 
 
-	secondaryText.setString(test + L"\n" + std::to_wstring(startMenu[0].text[0]));
-	secondaryText.setPosition(0, 0);
+	secondaryText.setString("//Typerr");
+	secondaryText.setPosition(0, 150);
+	secondaryText.setCharacterSize(150);
+	secondaryText.setRotation(-4.f);
+	window->draw(secondaryText);
+
+	secondaryText.setString(L"Начните печатать то, куда хотите перейти. \nОбращайте внимание на слова, начинающиеся с большой буквы. \nДописывать слова до конца не обязательно.");
+	secondaryText.setPosition(0, window->getSize().y - 60);
+	secondaryText.setCharacterSize(20);
+	secondaryText.setFillColor(sf::Color(50, 50, 50));
+	secondaryText.setRotation(-1.f);
 	window->draw(secondaryText);
 
 
@@ -168,16 +220,16 @@ void MainMenuScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Netw
 				if (startMenu[i].typedText != L"") startMenu[i].typedText = startMenu[i].text;
 			}
 		}
-		/*if (event->key.code == sf::Keyboard::Space) {
-			nM->whosonline();
-		}*/
+		//if (event->key.code == sf::Keyboard::Space) {
+		//	nM->getWords(0, 0);
+		//}
 	}
 
 	if (event->type == sf::Event::TextEntered) {
 		wchar_t inputChar = static_cast<wchar_t>(event->text.unicode);
 		//if (event->text.unicode == 13) inputChar = '\n';
 		int atleastone = false;
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < (nM->activeRequest? 8 : 6); i++) {
 
 			if (inputChar == L'\b') {
 				startMenu[i].inputEvent(inputChar, sm);
@@ -243,10 +295,27 @@ void MainMenuScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Netw
 			switchScene = true;
 			sm->playSuccess();
 		}
+		if (startMenu[6].typedText == startMenu[6].text) {
+			if (nM->activeRequest) {
+				nM->acceptRequest(nM->messages[0].who);
+			}
+		}
+		if (startMenu[7].typedText == startMenu[7].text) {
+			if (nM->activeRequest) {
+				if (!nM->messages.empty()) {
+					nM->messages[0].finished = true;
+				}
+			}
+		}
 		if (startMenu[3].typedText == startMenu[3].text) {
-			onlineSelected = true;
-			switchScene = true;
-			sm->playSuccess();
+			if (nM->isLoggedIn()){
+				onlineSelected = true;
+				switchScene = true;
+				sm->playSuccess();
+			}
+			else {
+				sm->playError();
+			}
 		}
 	}
 }
@@ -261,6 +330,9 @@ e_gameState MainMenuScene::switchSceneEvent() {
 	}
 	if (onlineSelected) {
 		return PLAYER_PICK;
+	}
+	if (duelintent) {
+		return DUEL_PLAY;
 	}
 }
 

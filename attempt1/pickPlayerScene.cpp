@@ -37,6 +37,7 @@ void PickPlayerScene::Update(sf::RenderWindow* window, NetworkManager* nM, float
 			if (mainText.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y)) {
 				mainText.setCharacterSize(50);
 				selectedPlayer = players[i].id;
+				selectedname = players[i].name;
 			}
 
 			window->draw(mainText);
@@ -62,6 +63,10 @@ void PickPlayerScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Ne
 		if (event->mouseButton.button == sf::Mouse::Left && selectedPlayer >= 0) {
 			std::cout << selectedPlayer << std::endl;
 			nM->duelRequest(selectedPlayer);
+			nM->opponentname = selectedname;
+			nM->who = selectedPlayer;
+			switchScene = true;
+			back = true;
 		}
 	}
 }

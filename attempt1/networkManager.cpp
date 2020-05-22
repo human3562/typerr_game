@@ -3,6 +3,9 @@
 #include <nlohmann/json.hpp>
 //int qstate;
 
+#include <locale>
+#include <codecvt>
+
 using json = nlohmann::json;
 
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp){
@@ -390,10 +393,153 @@ void NetworkManager::duelRequest(int id){
 	}
 	curl_global_cleanup();
 
-	updateStats();
+	//updateStats();
 
 }
 
+void NetworkManager::acceptRequest(int from) {
+
+	CURL* curl;
+	CURLcode res;
+
+	std::string str = "uniqueKey=" + APIkey + "&id=" + std::to_string(id) + "&from=" + std::to_string(from);
+	int returnval = 0;
+	/* In windows, this will init the winsock stuff */
+	curl_global_init(CURL_GLOBAL_ALL);
+	//std::string readBuffer;
+	/* get a curl handle */
+	curl = curl_easy_init();
+	if (curl) {
+		/* First set the URL that is about to receive our POST. This URL can
+		   just as well be a https:// URL if that is what should receive the
+		   data. */
+
+		   //https://typerrgame.000webhostapp.com/requestduel.php?uniqueKey=67fa0f92f7eacc218a5257f8ec5de129&id=5&who=4&name=skamazzz
+
+		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/acceptduel.php");
+		/* Now specify the POST data */
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
+		//curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		//curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		/* Perform the request, res will get the return code */
+		res = curl_easy_perform(curl);
+
+
+
+
+		//std::cout << &readBuffer << std::endl;
+
+		//try {
+		//	json result = json::parse(readBuffer);
+		//	std::cout << result.dump() << std::endl;
+		//	id = std::stoi(result["userId"].get<std::string>());
+		//	accountName = result["username"].get<std::string>();
+		//	averageWPM = std::stoi(result["userWPM"].get<std::string>());
+		//	averageACC = std::stoi(result["userACC"].get<std::string>());
+		//	loggedIn = true;
+		//	returnval = 1;
+
+		//}
+		//catch (json::exception & e)
+		//{
+		//	// output exception information
+		//	std::cout << "message: " << e.what() << '\n'
+		//		<< "exception id: " << e.id << std::endl;
+		//}
+
+
+		/* Check for errors */
+		if (res != CURLE_OK)
+			fprintf(stderr, "curl_easy_perform() failed: %s\n",
+				curl_easy_strerror(res));
+
+		/* always cleanup */
+		curl_easy_cleanup(curl);
+
+	}
+	curl_global_cleanup();
+
+	//get words
+	std::cout << "should get words from gamefile testfile" << id << who << ".txt i guess" << std::endl;
+	getWords(id, who);
+
+}
+
+void NetworkManager::getWords(int id1, int id2) {
+	CURL* curl;
+	CURLcode res;
+
+	std::string str = "uniqueKey="+APIkey+"&id1=" + std::to_string(id1) + "&id2=" + std::to_string(id2);
+	/* In windows, this will init the winsock stuff */
+	curl_global_init(CURL_GLOBAL_ALL);
+	std::string readBuffer;
+	/* get a curl handle */
+	curl = curl_easy_init();
+	if (curl) {
+		/* First set the URL that is about to receive our POST. This URL can
+		   just as well be a https:// URL if that is what should receive the
+		   data. */
+
+
+
+		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/getwords.php");
+		/* Now specify the POST data */
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		/* Perform the request, res will get the return code */
+		res = curl_easy_perform(curl);
+
+
+		std::cout << readBuffer << std::endl;
+		//std::wstring wreadBuffer(readBuffer.begin(), readBuffer.end());
+
+		try {
+			json result = json::parse(readBuffer);
+			std::cout << result.dump() << std::endl;
+			dueltext.clear();
+			std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+
+			for (int i = 0; i < result.size(); i++) {
+				std::wstring line = converter.from_bytes(result[i].get<std::string>());
+				dueltext.push_back({line});
+			}
+			TEST = dueltext[1];
+			//std::cout << dueltext.size() << std::endl;
+			//std::wstring test = L"Привет";
+			//std::wcout << test << std::endl;
+			//std::cout << (int)dueltext[0][1] << std::endl;
+			//std::cout << (int)test[1] << std::endl;
+			//messages.push_back({ std::to_string(dueltext[0][3]) + dueltext[0], 10.f });
+			/*onlinePlayers.clear();
+			for (int i = 0; i < result.size(); i++) {
+				onlinePlayers.push_back({ stoi(result[i][0].get<std::string>()), result[i][1].get<std::string>() });
+			}
+			std::cout << onlinePlayers.size() << std::endl;
+			std::cout << onlinePlayers[0].id << " " << onlinePlayers[0].name << std::endl;*/
+
+		}
+		catch (json::exception & e)
+		{
+			// output exception information
+			std::cout << "message: " << e.what() << '\n'
+				<< "exception id: " << e.id << std::endl;
+		}
+
+
+		/* Check for errors */
+		if (res != CURLE_OK)
+			fprintf(stderr, "curl_easy_perform() failed: %s\n",
+				curl_easy_strerror(res));
+
+		/* always cleanup */
+		curl_easy_cleanup(curl);
+	}
+	curl_global_cleanup();
+
+	activeRequest = false;
+	gotoduel = true;
+}
 
 std::wstring NetworkManager::getAccountName() {
 	std::wstring wstr(accountName.begin(), accountName.end());
@@ -407,7 +553,9 @@ void NetworkManager::drawServerMessages(sf::RenderWindow* window, float fElapsed
 
 		if (result["sendType"] == "notification") {
 			std::cout << "oh wow" << std::endl;
-			messages.push_back({ result["content"].get<std::string>() , 4.f });
+			if (result["content"] == "login_success"){
+				messages.push_back({ "Вы успешно зашли в свой аккаунт!", 4.f});
+			}
 		}
 
 		if (result["sendType"] == "onlinecheck") {
@@ -415,11 +563,28 @@ void NetworkManager::drawServerMessages(sf::RenderWindow* window, float fElapsed
 		}
 
 		if (result["sendType"] == "duelRequest") {
-			messages.push_back({result["senderName"].get<std::string>() + " wants to duel!", 10.f});
+			activeRequest = true;
+			who = std::stoi(result["from"].get<std::string>());
+			std::cout << "ok we got a request from " << who << std::endl;
+			opponentname = who;
+			messages.push_back({result["senderName"].get<std::string>() + " вызывает вас на дуель!", 10.f, true, who});
+		}
+
+		if (result["sendType"] == "requestAccepted") {
+			//get words
+			std::cout << "should get words from gamefile testfile" << who << id << ".txt i guess" << std::endl;
+			getWords(who, id);
+
 		}
 
 		serverEvents.erase(serverEvents.begin());
 	}
+
+	//mainText.setString(TEST);
+	//mainText.setCharacterSize(30);
+	//mainText.setPosition(340, 340);
+	////textWidth = sfText->getLocalBounds().width;
+	//window->draw(mainText);
 
 	if (!messages.empty()) {
 		//for (int i = 0; i < messages.size(); i++) {

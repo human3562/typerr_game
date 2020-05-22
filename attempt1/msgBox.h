@@ -5,12 +5,15 @@ class MsgBox
 {
 public:
 	MsgBox(std::string content, float showtime);
+	MsgBox(std::string content, float showtime, bool request, int who);
 	~MsgBox() {}
 
 public:
 	void update(float fElapsedTime);
 	void show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedTime);
 	bool finished = false;
+	bool request = false;
+	int who = -1;
 
 private:
 	float SmoothApproach(float pastPosition, float pastTargetPosition, float targetPosition, float speed, float deltaTime);

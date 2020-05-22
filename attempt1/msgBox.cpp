@@ -5,6 +5,13 @@ MsgBox::MsgBox(std::string content, float showtime){
 	this->showtime = showtime;
 }
 
+MsgBox::MsgBox(std::string content, float showtime, bool request, int who) {
+	this->content = content;
+	this->showtime = showtime;
+	this->request = request;
+	this->who = who;
+}
+
 void MsgBox::update(float fElapsedTime){
 	if (time > showtime) {
 		targetPosX = -textWidth;
@@ -19,8 +26,8 @@ void MsgBox::update(float fElapsedTime){
 
 void MsgBox::show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedTime){
 	sfText->setString(content);
-	sfText->setCharacterSize(20);
-	sfText->setPosition(positionX, 200);
+	sfText->setCharacterSize(30);
+	sfText->setPosition(positionX, 340);
 	textWidth = sfText->getLocalBounds().width;
 	window->draw(*sfText);
 }

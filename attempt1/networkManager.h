@@ -33,6 +33,8 @@ public:
 	void updateStats();
 	void whosonline();
 	void duelRequest(int id);
+	void acceptRequest(int id);
+	void getWords(int id1, int id2);
 	//void longPollServer();
 	void startPolling();
 
@@ -48,10 +50,16 @@ public:
 	std::vector<player> onlinePlayers;
 	int id = -1;
 	bool cancelPoll = false;
+	std::vector<MsgBox> messages;
+	std::vector<std::wstring> dueltext;
+	bool activeRequest = false;
+	int who = -1;
+	bool gotoduel = false;
+	std::string opponentname;
+	std::wstring TEST = L"";
 
 private:
 	std::vector<std::future<void>> m_Futures;
-	std::vector<MsgBox> messages;
 	//static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp);
 	int lastModifyTime = 0;
 	bool loggedIn = false;

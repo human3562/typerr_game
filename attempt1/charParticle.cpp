@@ -27,3 +27,12 @@ void CharParticle::show(sf::RenderWindow* window, sf::Text* sfText, float fElaps
 	sfText->setRotation(angle * (180.0f / 3.1415926535f));
 	window->draw(*sfText);
 }
+
+
+
+/*
+INSERT INTO `wordtable`(`content`) VALUES (" ");
+INSERT INTO `wordtable`(`content`) VALUES (" ");
+INSERT INTO `wordtable`(`content`) VALUES (" ");
+INSERT INTO `wordtable`(`content`) VALUES (" ");
+*/

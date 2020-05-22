@@ -21,6 +21,7 @@ private:
 	sf::Font font;
 	bool back = false;
 	int selectedPlayer = -1;
+	std::string selectedname = "";
 
 };
 

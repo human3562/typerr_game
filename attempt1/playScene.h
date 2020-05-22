@@ -3,7 +3,6 @@
 #include "inputText.h"
 #include "charParticle.h"
 #include "resultScene.h"
-#include <list>
 class PlayScene : public GameScene
 {
 public:

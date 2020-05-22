@@ -51,6 +51,9 @@
     <ClCompile Include="pickPlayerScene.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="duelPlayScene.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inputText.h">
@@ -93,6 +96,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="pickPlayerScene.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="duelPlayScene.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

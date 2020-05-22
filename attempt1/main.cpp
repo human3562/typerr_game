@@ -8,9 +8,14 @@
 #include "profileScene.h"
 #include "networkManager.h"
 #include "pickPlayerScene.h"
+#include "duelPlayScene.h"
 
 int main() {
+	//setlocale(LC_ALL, "Russian");
 	srand(unsigned(time(0)));
+
+	sf::Image icon;
+	icon.loadFromFile("resources/textures/typewritericon.png");
 
 	float fElapsedTime = 0.001f;
 	e_gameState currentGameState = MENU;
@@ -20,6 +25,7 @@ int main() {
 
 	sf::RenderWindow window(sf::VideoMode(1024, 768), "jeesus", sf::Style::Default, settings);
 
+	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	//window.setFramerateLimit(300);
 
 	window.setKeyRepeatEnabled(false); //no spam   >:(
@@ -39,11 +45,12 @@ int main() {
 
 	nM.mainText = mainText;
 
-	GameScene* scenes[5];
+	GameScene* scenes[6];
 	ProfileScene s_profile;
 	MainMenuScene s_mainmenu;
 	ResultScene s_result;
 	PickPlayerScene s_pickplayer;
+	DuelPlayScene s_duelplay;
 
 	PlayScene s_play;
 	s_play.loadText();
@@ -54,6 +61,7 @@ int main() {
 	scenes[PROFILE] = &s_profile;
 	scenes[RESULT] =  &s_result;
 	scenes[PLAYER_PICK] = &s_pickplayer;
+	scenes[DUEL_PLAY] = &s_duelplay;
 
 	while (window.isOpen()) {
 
@@ -96,7 +104,7 @@ int main() {
 		}
 		window.display();
 		
-		window.setTitle("FPS: " + std::to_string(1.0f / fElapsedTime));
+		//window.setTitle("FPS: " + std::to_string(1.0f / fElapsedTime));
 		
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 		fElapsedTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() / 1e+9;

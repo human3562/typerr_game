@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="charParticle.cpp" />
+    <ClCompile Include="duelPlayScene.cpp" />
     <ClCompile Include="inputText.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenuScene.cpp" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charParticle.h" />
+    <ClInclude Include="duelPlayScene.h" />
     <ClInclude Include="gameScene.h" />
     <ClInclude Include="gameState.h" />
     <ClInclude Include="inputText.h" />
