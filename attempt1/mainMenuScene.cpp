@@ -12,7 +12,10 @@ void MainMenuScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	profileSelected = false;
 	onlineSelected = false;
 	duelintent = false;
+
 	nM->gotoduel = false;
+	nM->opponentReady = false;
+	nM->opponentResult = false;
 
 	startMenu[0].typedText = L"";
 	startMenu[1].typedText = L"";
@@ -297,7 +300,7 @@ void MainMenuScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Netw
 		}
 		if (startMenu[6].typedText == startMenu[6].text) {
 			if (nM->activeRequest) {
-				nM->acceptRequest(nM->messages[0].who);
+				while(!nM->acceptRequest(nM->messages[0].who));
 			}
 		}
 		if (startMenu[7].typedText == startMenu[7].text) {

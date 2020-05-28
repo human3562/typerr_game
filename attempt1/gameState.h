@@ -8,5 +8,6 @@ enum e_gameState {
 	PROFILE,
 	RESULT,
 	PLAYER_PICK,
-	DUEL_PLAY
+	DUEL_PLAY,
+	DUEL_RESULT
 };

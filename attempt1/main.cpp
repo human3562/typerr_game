@@ -9,6 +9,7 @@
 #include "networkManager.h"
 #include "pickPlayerScene.h"
 #include "duelPlayScene.h"
+#include "duelResultScene.h"
 
 int main() {
 	//setlocale(LC_ALL, "Russian");
@@ -45,16 +46,18 @@ int main() {
 
 	nM.mainText = mainText;
 
-	GameScene* scenes[6];
+	GameScene* scenes[7];
 	ProfileScene s_profile;
 	MainMenuScene s_mainmenu;
 	ResultScene s_result;
 	PickPlayerScene s_pickplayer;
 	DuelPlayScene s_duelplay;
+	DuelResultScene s_duelresult;
+	s_duelplay.setResultScenePointer(&s_duelresult);
 
 	PlayScene s_play;
 	s_play.loadText();
-	s_play.setResultScenePointer(&s_result); //to pass stats n shit to the result scene
+	s_play.setResultScenePointer(&s_result); 
 
 	scenes[MENU] =	  &s_mainmenu;
 	scenes[PLAY] =    &s_play;
@@ -62,6 +65,7 @@ int main() {
 	scenes[RESULT] =  &s_result;
 	scenes[PLAYER_PICK] = &s_pickplayer;
 	scenes[DUEL_PLAY] = &s_duelplay;
+	scenes[DUEL_RESULT] = &s_duelresult;
 
 	while (window.isOpen()) {
 

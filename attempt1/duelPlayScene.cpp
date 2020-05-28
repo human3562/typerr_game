@@ -15,6 +15,8 @@ void DuelPlayScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	back = false;
 	switchScene = false;
 	errorWhenLoading = false;
+	finished = false;
+	ready = false;
 
 	time = 0;
 
@@ -59,6 +61,15 @@ void DuelPlayScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 
 	//window->display();
 	//window->clear(sf::Color(50, 50, 50));
+
+	if (nM->opponentReady && ready) {
+		//std::cout << playtext.size() << " " << wordAmt << std::endl;
+		if (playtext.size() == wordAmt+1) {
+			pop(&playtext[playtext.size() - 1]);
+			playtext.pop_back();
+			//sm->playSuccess();
+		}
+	}
 
 	sf::RectangleShape rect(sf::Vector2f(window->getSize().x + 100, 40));
 	rect.setPosition(sf::Vector2f(-50, (window->getSize().y / 2.0f) + 5));
@@ -147,32 +158,35 @@ void DuelPlayScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 	scoreText.setPosition(window->getSize().x - scoreText.getLocalBounds().width - 10, window->getSize().y - 130);
 	window->draw(scoreText);
 
-	sf::Text vs;
-	vs.setFont(font);
-	vs.setCharacterSize(50);
-	vs.setString(nM->getAccountName());
-	vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width/2.f) - 350, window->getSize().y / 2.f);
-	window->draw(vs);
+	if (playtext.size() == wordAmt + 1) {
 
-	vs.setCharacterSize(40);
-	vs.setString(ready?"Готов":"Не готов");
-	vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f) - 350, (window->getSize().y / 2.f) + 100);
-	window->draw(vs);
+		sf::Text vs;
+		vs.setFont(font);
+		vs.setCharacterSize(50);
+		vs.setString(nM->getAccountName());
+		vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f) - 350, window->getSize().y / 2.f);
+		window->draw(vs);
 
-	vs.setCharacterSize(200);
-	vs.setString("VS");
-	vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f), window->getSize().y / 2.f);
-	window->draw(vs);
+		vs.setCharacterSize(40);
+		vs.setString(ready ? "Готов" : "Не готов");
+		vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f) - 350, (window->getSize().y / 2.f) + 100);
+		window->draw(vs);
 
-	vs.setCharacterSize(50);
-	//vs.setString(nM->opponentname);
-	vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f) + 350, window->getSize().y / 2.f);
-	window->draw(vs);
+		vs.setCharacterSize(200);
+		vs.setString("VS");
+		vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f), window->getSize().y / 2.f);
+		window->draw(vs);
 
-	vs.setCharacterSize(40);
-	vs.setString(opponentready ? "Готов" : "Не готов");
-	vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f) + 350, (window->getSize().y / 2.f) + 100);
-	window->draw(vs);
+		vs.setCharacterSize(50);
+		vs.setString(nM->opponentname);
+		vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f) + 350, window->getSize().y / 2.f);
+		window->draw(vs);
+
+		vs.setCharacterSize(40);
+		vs.setString(nM->opponentReady ? "Готов" : "Не готов");
+		vs.setPosition(((window->getSize().x / 2.f) - vs.getLocalBounds().width / 2.f) + 350, (window->getSize().y / 2.f) + 100);
+		window->draw(vs);
+	}
 
 	sf::Text particleSize;
 	particleSize.setFont(font);
@@ -183,7 +197,7 @@ void DuelPlayScene::Update(sf::RenderWindow* window, NetworkManager* nM, float f
 	window->draw(particleSize);
 
 	//window->display();
-	if (playtext.size() <= wordAmt) {
+	if (playtext.size() <= wordAmt && !finished) {
 		time += fElapsedTime;
 	}
 }
@@ -210,8 +224,11 @@ void DuelPlayScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Netw
 				else {
 					sm->playTypeMusic();
 				}
+				if (!ready) {
+					nM->sendReady(nM->id, nM->who);
+				}
 				ready = true;
-				if (opponentready) {
+				if (nM->opponentReady && ready) {
 					pop(&playtext[playtext.size() - 1]);
 					playtext.pop_back();
 					sm->playSuccess();
@@ -246,19 +263,21 @@ void DuelPlayScene::EventHandle(sf::RenderWindow* window, sf::Event* event, Netw
 e_gameState DuelPlayScene::switchSceneEvent(){
 	isStarted = false;
 	if (errorWhenLoading) {
-		//return MENU;
+		return MENU;
 	}
 	if (back) {
 		return MENU;
 	}
 	if (finished) {
-		//ResultScenePointer->setupInfo(time, charAmt, ((keyPresses - mistakes) / (float)keyPresses), score);  //float time, int charAmt, int mistakes, int score
-		//return RESULT;
+		ResultScenePointer->setupInfo(time, charAmt, ((keyPresses - mistakes) / (float)keyPresses), score);  //float time, int charAmt, int mistakes, int score
+		return DUEL_RESULT;
 	}
 }
 
 void DuelPlayScene::loadText(){
 	//here we should get words from server and stuff
+	//or not i guess
+
 	//std::vector<std::wstring> result;
 	////in.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 	//std::wifstream in("resources/zdb-win8.txt", std::ifstream::in);
@@ -282,7 +301,8 @@ void DuelPlayScene::loadText(){
 	//text = result;
 }
 
-void DuelPlayScene::setResultScenePointer(ResultScene* ptr){
+void DuelPlayScene::setResultScenePointer(DuelResultScene* ptr){
+	ResultScenePointer = ptr;
 }
 
 float DuelPlayScene::lerp(float a, float b, float f) {

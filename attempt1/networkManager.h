@@ -33,8 +33,10 @@ public:
 	void updateStats();
 	void whosonline();
 	void duelRequest(int id);
-	void acceptRequest(int id);
-	void getWords(int id1, int id2);
+	bool acceptRequest(int id);
+	bool getWords(int id1, int id2);
+	void sendReady(int from, int to);
+	bool sendDuelResult(int from, int to, float time, int wpm, int acc, int score);
 	//void longPollServer();
 	void startPolling();
 
@@ -55,8 +57,15 @@ public:
 	bool activeRequest = false;
 	int who = -1;
 	bool gotoduel = false;
-	std::string opponentname;
+	std::string opponentname = "";
 	std::wstring TEST = L"";
+	bool opponentReady = false;
+
+	bool opponentResult = false;
+	float os_time = 0;
+	int os_WPM = 0;
+	int os_ACC = 0;
+	int os_score = 0;
 
 private:
 	std::vector<std::future<void>> m_Futures;

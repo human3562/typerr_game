@@ -2,7 +2,7 @@
 #include "gameScene.h"
 #include "inputText.h"
 #include "charParticle.h"
-#include "resultScene.h"
+#include "duelResultScene.h"
 class DuelPlayScene : public GameScene
 {
 public:
@@ -14,7 +14,7 @@ public:
 	void EventHandle(sf::RenderWindow* window, sf::Event* event, NetworkManager* nM, SoundMaster* sm) override;
 	e_gameState switchSceneEvent() override;
 	void loadText();
-	void setResultScenePointer(ResultScene* ptr);
+	void setResultScenePointer(DuelResultScene* ptr);
 
 private:
 	float lerp(float a, float b, float f);
@@ -44,9 +44,9 @@ private:
 	int keyPresses = 0;
 
 	bool ready = false;
-	bool opponentready = false;
+	//bool opponentready = false;
 
-	ResultScene* ResultScenePointer = nullptr;
+	DuelResultScene* ResultScenePointer = nullptr;
 	/*sf::SoundBuffer keySounds[4];
 	sf::Sound sound;*/
 };
