@@ -256,10 +256,8 @@ e_gameState PlayScene::switchSceneEvent() {
 	}
 }
 
-void PlayScene::loadText()
-{
+void PlayScene::loadText(){
 	std::vector<std::wstring> result;
-	//in.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 	std::wifstream in("resources/zdb-win8.txt", std::ifstream::in);
 	in.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
 	if (in.is_open()) {

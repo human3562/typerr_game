@@ -28,8 +28,6 @@ void UIStuff::EventHandle(sf::RenderWindow* window, sf::Event* event, SoundMaste
 			settings[selected]->EventHandle(window, event, sm);
 		}
 	}
-
-
 }
 
 TextSetting::TextSetting(float positionX, float positionY, std::wstring placeholder, bool isPassword){
@@ -109,8 +107,7 @@ ButtonSetting::ButtonSetting(float positionX, float positionY, std::wstring titl
 	this->rotation = rotation;
 }
 
-void ButtonSetting::Show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedTime)
-{
+void ButtonSetting::Show(sf::RenderWindow* window, sf::Text* sfText, float fElapsedTime){
 	sfText->setPosition(positionX, positionY);
 	sfText->setRotation(rotation);
 	sfText->setString(title);
@@ -127,8 +124,7 @@ void ButtonSetting::Show(sf::RenderWindow* window, sf::Text* sfText, float fElap
 	window->draw(*sfText);
 }
 
-void ButtonSetting::EventHandle(sf::RenderWindow* window, sf::Event* event, SoundMaster* sm)
-{
+void ButtonSetting::EventHandle(sf::RenderWindow* window, sf::Event* event, SoundMaster* sm){
 	if (event->text.unicode == 13) {
 		act = true;
 	}

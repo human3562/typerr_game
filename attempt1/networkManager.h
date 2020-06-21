@@ -39,6 +39,7 @@ public:
 	bool sendDuelResult(int from, int to, float time, int wpm, int acc, int score);
 	//void longPollServer();
 	void startPolling();
+	void stop();
 
 public:
 	bool isLoggedIn();

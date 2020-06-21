@@ -30,11 +30,6 @@ void DuelPlayScene::Start(sf::RenderWindow* window, NetworkManager* nM){
 	mainText.setFont(font);
 	mainText.setStyle(sf::Text::Regular);
 
-	/*for (int i = 0; i < 4; i++) {
-		if (!keySounds[i].loadFromFile("resources/sounds/key" + std::to_string(i+1) + ".ogg")) {
-			exit(1);
-		}
-	}*/
 	text = nM->dueltext;
 	charAmt = 0;
 	//if (!loaded) loadText();
@@ -305,7 +300,7 @@ void DuelPlayScene::setResultScenePointer(DuelResultScene* ptr){
 	ResultScenePointer = ptr;
 }
 
-float DuelPlayScene::lerp(float a, float b, float f) {
+float DuelPlayScene::lerp(float a, float b, float f) { //do i even use this?
 	return a + f * (b - a);
 }
 

@@ -23,26 +23,22 @@ SoundMaster::SoundMaster() {
 	successSound.setVolume(20);
 }
 
-void SoundMaster::playKey()
-{
+void SoundMaster::playKey(){
 	keySound.setBuffer(keySounds[rand() % 4]);
 	keySound.play();
 }
 
-void SoundMaster::playBackspace()
-{
+void SoundMaster::playBackspace(){
 	keySound.setBuffer(backspace);
 	keySound.play();
 }
 
-void SoundMaster::playSuccess()
-{
+void SoundMaster::playSuccess(){
 	successSound.setBuffer(success);
 	successSound.play();
 }
 
-void SoundMaster::playError()
-{
+void SoundMaster::playError(){
 	keySound.setBuffer(error);
 	keySound.play();
 }

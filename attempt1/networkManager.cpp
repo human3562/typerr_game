@@ -264,6 +264,10 @@ void NetworkManager::startPolling(){
 	m_Futures.push_back(std::async(std::launch::async, longPollServer, &polling, id, &lastModifyTime, &serverEvents));
 }
 
+void NetworkManager::stop(){
+	
+}
+
 int NetworkManager::getWPM(){
 	return averageWPM;
 }
