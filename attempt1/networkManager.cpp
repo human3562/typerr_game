@@ -35,7 +35,7 @@ int NetworkManager::login(std::wstring uid, std::wstring pwd) {
 		
 		
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/login.inc.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/login.inc.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -98,7 +98,7 @@ void NetworkManager::uploadResult(int wpm, int acc){
 
 
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/uploadResult.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/uploadResult.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		//curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -162,7 +162,7 @@ void NetworkManager::updateStats(){
 
 
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/getStats.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/getStats.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -219,7 +219,7 @@ void longPollServer(bool *polling, int id, int *lastModifyTime, std::vector<std:
 
 
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/long_poll.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/long_poll.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -294,7 +294,7 @@ void NetworkManager::whosonline(){
 
 
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/whosonline.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/whosonline.php");
 		/* Now specify the POST data */
 		//curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -354,7 +354,7 @@ void NetworkManager::duelRequest(int id){
 
 		//https://typerrgame.000webhostapp.com/requestduel.php?uniqueKey=67fa0f92f7eacc218a5257f8ec5de129&id=5&who=4&name=skamazzz
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/requestduel.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/requestduel.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		//curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -421,7 +421,7 @@ bool NetworkManager::acceptRequest(int from) {
 
 		   //https://typerrgame.000webhostapp.com/requestduel.php?uniqueKey=67fa0f92f7eacc218a5257f8ec5de129&id=5&who=4&name=skamazzz
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/acceptduel.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/acceptduel.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -490,7 +490,7 @@ bool NetworkManager::getWords(int id1, int id2) {
 
 
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/getwords.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/getwords.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -570,7 +570,7 @@ void NetworkManager::sendReady(int from, int to) {
 
 		   //https://typerrgame.000webhostapp.com/requestduel.php?uniqueKey=67fa0f92f7eacc218a5257f8ec5de129&id=5&who=4&name=skamazzz
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/ready.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/ready.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		//curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -637,7 +637,7 @@ bool NetworkManager::sendDuelResult(int from, int to, float time, int wpm, int a
 
 		   //https://typerrgame.000webhostapp.com/requestduel.php?uniqueKey=67fa0f92f7eacc218a5257f8ec5de129&id=5&who=4&name=skamazzz
 
-		curl_easy_setopt(curl, CURLOPT_URL, "https://typerrgame.000webhostapp.com/duelresult.php");
+		curl_easy_setopt(curl, CURLOPT_URL, "http://typerrgametesting/duelresult.php");
 		/* Now specify the POST data */
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);

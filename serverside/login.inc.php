@@ -38,12 +38,12 @@
                     $id = $row['idUsers'];
                     $key = md5(microtime().rand());
                     
-                    $userFile = fopen("userFiles/testfile".$id.".txt", "w");
+                    $userFile = fopen("userFiles/gamefile".$id.".txt", "w");
                     fwrite($userFile, '{"sendType":"notification", "content":"login_success"}');
                     fclose($userFile);
-                    
+
                     $checkIfUserExists = mysqli_query($db->getDB(), "SELECT * FROM onlineUsers WHERE userID = ".$id);
-                    
+
                     if(mysqli_num_rows($checkIfUserExists)>0){
                         //echo 'yep';
                         mysqli_query($db->getDB(), 'UPDATE `onlineUsers` SET `userKey`="'.$key.'" WHERE `userID` = '.$id.';');
@@ -55,8 +55,8 @@
                             //echo 'nooo';
                         }
                     }
-                    
-                    
+
+
                     echo('{ "username":"'.$row['uidUsers'].'", "userId":"'.$row['idUsers'].'", "userWPM":"'.$row['avgWPM'].'", "userACC":"'.$row['avgACC'].'", "uniqueKey":"'.$key.'"}');
                 }else{
                     echo 'success';
