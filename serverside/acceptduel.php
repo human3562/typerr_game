@@ -29,7 +29,7 @@ if(!mysqli_stmt_prepare($stmt,"SELECT * FROM onlineUsers WHERE userKey=? AND use
             //load game file with words.
             $gameFileW = fopen("gameFiles/testfile".$id.$from.".txt", "w") or die("YUCK");
             //$wordDB = fopen("zdb-win8.txt", "r") or die("Unable to open word database.");
-            $wordDB = file("zdb-win8.txt");
+            $wordDB = file("wordsdata.txt");
             fwrite($gameFileW,"[");
             for($i = 0; $i < 10; $i++){
                 $line = $wordDB[array_rand($wordDB)];
@@ -42,21 +42,20 @@ if(!mysqli_stmt_prepare($stmt,"SELECT * FROM onlineUsers WHERE userKey=? AND use
                 }
                 else{
                     fwrite($gameFileW, "]");
-                } 
+                }
             }
-            
+
             //fclose($wordDB);
             fclose($gameFileW);
-            
+
             $userFile = fopen("userFiles/testfile".$from.".txt", "w") or die("cant do this shit anymore");
             fwrite($userFile, '{"sendType":"requestAccepted"}');
             fclose($userFile);
             echo '{"content":"success"}';
-            
+
         }
         fclose($gameFileR);
     }else{
         exit();
     }
 }
-

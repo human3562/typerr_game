@@ -1,5 +1,5 @@
 <?php
-$myfile = fopen("testfile.txt", "w");
+$myfile = fopen("gamefile.txt", "w");
 $txt = "John Doe\n";
 fwrite($myfile, $txt);
 fclose($myfile);

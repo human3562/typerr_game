@@ -1,9 +1,12 @@
 <?php
 class DBConnect{
+    //ALL this should be set to according stuff from your hosting platform
+    // p.s. probably not secure
+
     private static $dbIP='localhost';
-    private static $dbUser='id13359092_human3562';
-    private static $dbPassword = '+Q<d2n0QSb54\z+R';
-    private static $dbName ='id13359092_typerdb';
+    private static $dbUser='root';
+    private static $dbPassword = '';
+    private static $dbName ='typerrdata';
     private static $dbPort=3306;
     public static $db=null;
 

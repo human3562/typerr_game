@@ -16,8 +16,8 @@ $id2 = $_POST["id2"];
 //echo(json_encode($str));
 
 
-$myfile = fopen("gameFiles/testfile".$id1.$id2.".txt", "r") or die("Unable to open file!");
-$str = fread($myfile,filesize("gameFiles/testfile".$id1.$id2.".txt"));
+$myfile = fopen("gameFiles/gamefile".$id1.$id2.".txt", "r") or die("Unable to open file!");
+$str = fread($myfile,filesize("gameFiles/gamefile".$id1.$id2.".txt"));
 fclose($myfile);
 
 $json = json_decode($str);
